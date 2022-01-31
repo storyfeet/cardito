@@ -7,3 +7,7 @@ edition = "2021"
 
 [dependencies]
 templito = {path="../../mlibs/templito/"}
+clap = {version ="3.0.13",features=["cargo"]}
+err_tools = "0.1.1"
+anyhow = "1.0.53"
+card_format = "0.1.0"

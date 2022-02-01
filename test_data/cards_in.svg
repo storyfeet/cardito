@@ -1,0 +1,13 @@
+{{@export card_string}}
+dave:
+.age:30
+steve:
+.age:50
+
+{{/export}}
+
+{{global card}}
+<text>hello {{.Name}}. you are {{.age}}</text>
+{{/global}}
+
+

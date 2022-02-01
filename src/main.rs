@@ -34,7 +34,7 @@ fn main() -> anyhow::Result<()> {
     }
 
     if let Some(sub) = clp.subcommand_matches("build") {
-        print_funcs(sub, &fman);
+        build_cards(sub, &fman)?;
     }
     Ok(())
 }
@@ -48,6 +48,7 @@ pub fn print_funcs(clp: &ArgMatches, fman: &BasicFuncs) {
 }
 
 pub fn build_cards(clp: &ArgMatches, fman: &BasicFuncs) -> anyhow::Result<()> {
+    println!("Building cards");
     let primary: String = match clp.value_of("file") {
         Some(fname) => std::fs::read_to_string(fname)?,
         None => {
@@ -60,9 +61,11 @@ pub fn build_cards(clp: &ArgMatches, fman: &BasicFuncs) -> anyhow::Result<()> {
     };
     let mut tm = templito::temp_man::BasicTemps::new();
 
-    let mut prim_tree = templito::TreeTemplate::from_str(&primary)?;
+    println!("parsing tree");
+    let prim_tree = templito::TreeTemplate::from_str(&primary)?;
     let (_, config) = prim_tree.run_exp(&[], &mut tm, fman)?;
 
+    println!("parsing cards");
     let cards = if let Some(card_path) = config.get("card_files") {
         read_cards(card_path)?
     } else if let Some(card_string) = config.get("card_string") {
@@ -70,6 +73,12 @@ pub fn build_cards(clp: &ArgMatches, fman: &BasicFuncs) -> anyhow::Result<()> {
     } else {
         return e_str("No Cards supplied: use 'card_files' or 'card_string'");
     };
+
+    let ctemplate = tm.get("card").e_str("No card template provided")?.clone();
+    for c in cards {
+        println!("\nCard::{:?}\n", c);
+        println!("{} ", ctemplate.run(&[&c, &config], &mut tm, fman)?);
+    }
 
     Ok(())
 }
@@ -82,6 +91,11 @@ pub fn read_cards(data: &TData) -> anyhow::Result<Vec<Card>> {
                 res.extend(read_cards(a)?);
             }
             Ok(res)
+        }
+        TData::String(fname) => {
+            let f = std::fs::read_to_string(fname)?;
+            let cards = card_format::parse_cards(&f)?;
+            Ok(cards)
         }
         _ => unimplemented! {},
     }

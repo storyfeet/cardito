@@ -82,13 +82,16 @@ pub fn build_cards(clp: &ArgMatches, fman: &BasicFuncs) -> anyhow::Result<()> {
             .expect("Builtin Templates should work (CARD_WRAP)")
     });
 
+    let dims = dimensions::Dimensions::new(&config);
+
     let mut cards_str = String::new();
-    for c in cards {
+    for (i, c) in cards.into_iter().enumerate() {
+        let (x, y) = dims.pos(i);
         let cstr = ctemplate.run(&[&c, &config], &mut tm, fman)?;
         let mut map = HashMap::new();
         map.insert("current_card", TData::String(cstr));
-        map.insert("current_x", TData::Int(3));
-        map.insert("current_y", TData::Int(4));
+        map.insert("current_x", TData::Float(x));
+        map.insert("current_y", TData::Float(y));
 
         cards_str.push_str(&card_wrap.run(&[&map, &config], &mut tm, fman)?);
     }

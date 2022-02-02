@@ -5,11 +5,13 @@
 >
 
 
-<g transform="translate(3mm,4mm)">
+<g transform="translate(15mm 28.5mm)">
+<rect x="0mm" y="0mm" width="45mm" height="60mm" fill="red" stroke="black" stroke-width="1mmpx"/>
 <text>hello dave. you are 30</text>
 
 </g>
-<g transform="translate(3mm,4mm)">
+<g transform="translate(60mm 28.5mm)">
+<rect x="0mm" y="0mm" width="45mm" height="60mm" fill="red" stroke="black" stroke-width="1mmpx"/>
 <text>hello steve. you are 50</text>
 
 </g>

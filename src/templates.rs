@@ -9,6 +9,6 @@ pub const PAGE_TEMPLATE: &'static str = r##"<svg version="1.1"
 "##;
 
 pub const CARD_WRAP: &'static str = r##"{{let u = first .units "mm"}}
-<g transform="translate({{.current_x}}{{$u}},{{.current_y}}{{$u}})">
+<g transform="translate({{.current_x}}{{$u}} {{.current_y}}{{$u}})">
 {{.current_card}}
 </g>"##;

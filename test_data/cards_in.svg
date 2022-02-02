@@ -6,7 +6,7 @@ steve:
 
 {{/export}}
 
-{{global card}}
+{{global card -}}
 <text>hello {{.Name}}. you are {{.age}}</text>
 {{/global}}
 

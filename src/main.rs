@@ -1,6 +1,10 @@
+mod dimensions;
+mod templates;
+
 use card_format::Card;
 use clap::*;
 use err_tools::*;
+use std::collections::HashMap;
 use std::io::Read;
 use std::str::FromStr;
 use templito::func_man::{BasicFuncs, FuncManager, WithFuncs};
@@ -48,7 +52,6 @@ pub fn print_funcs(clp: &ArgMatches, fman: &BasicFuncs) {
 }
 
 pub fn build_cards(clp: &ArgMatches, fman: &BasicFuncs) -> anyhow::Result<()> {
-    println!("Building cards");
     let primary: String = match clp.value_of("file") {
         Some(fname) => std::fs::read_to_string(fname)?,
         None => {
@@ -61,11 +64,9 @@ pub fn build_cards(clp: &ArgMatches, fman: &BasicFuncs) -> anyhow::Result<()> {
     };
     let mut tm = templito::temp_man::BasicTemps::new();
 
-    println!("parsing tree");
     let prim_tree = templito::TreeTemplate::from_str(&primary)?;
-    let (_, config) = prim_tree.run_exp(&[], &mut tm, fman)?;
+    let (_, mut config) = prim_tree.run_exp(&[], &mut tm, fman)?;
 
-    println!("parsing cards");
     let cards = if let Some(card_path) = config.get("card_files") {
         read_cards(card_path)?
     } else if let Some(card_string) = config.get("card_string") {
@@ -75,10 +76,33 @@ pub fn build_cards(clp: &ArgMatches, fman: &BasicFuncs) -> anyhow::Result<()> {
     };
 
     let ctemplate = tm.get("card").e_str("No card template provided")?.clone();
+
+    let card_wrap = tm.get("card_wrap").map(|c| c.clone()).unwrap_or_else(|| {
+        templito::TreeTemplate::from_str(templates::CARD_WRAP)
+            .expect("Builtin Templates should work (CARD_WRAP)")
+    });
+
+    let mut cards_str = String::new();
     for c in cards {
-        println!("\nCard::{:?}\n", c);
-        println!("{} ", ctemplate.run(&[&c, &config], &mut tm, fman)?);
+        let cstr = ctemplate.run(&[&c, &config], &mut tm, fman)?;
+        let mut map = HashMap::new();
+        map.insert("current_card", TData::String(cstr));
+        map.insert("current_x", TData::Int(3));
+        map.insert("current_y", TData::Int(4));
+
+        cards_str.push_str(&card_wrap.run(&[&map, &config], &mut tm, fman)?);
     }
+
+    config.insert("cards".to_string(), TData::String(cards_str));
+
+    let page_template = tm.get("page").map(|c| c.clone()).unwrap_or_else(|| {
+        templito::TreeTemplate::from_str(templates::PAGE_TEMPLATE)
+            .expect("Builtin templates should work (PAGE_TEMPLATE)")
+    });
+
+    let page_result = page_template.run(&[&config], &mut tm, fman)?;
+
+    println!("{}", page_result);
 
     Ok(())
 }

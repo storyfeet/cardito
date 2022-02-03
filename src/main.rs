@@ -24,6 +24,7 @@ fn main() -> anyhow::Result<()> {
             arg!(-f --file [file_name] "The primary template file"),
             arg!(-t --templates [templates] "The file or folder where utility templates are found"),
             arg!(-c --cards [cards] "The card file"),
+            arg!(-o --output [out_file] "The file to write the output to"),
         ]))
         .args(&[arg!(--trusted "Give the templates ability to execute functions and read and write files")])
         .get_matches();
@@ -105,7 +106,11 @@ pub fn build_cards(clp: &ArgMatches, fman: &BasicFuncs) -> anyhow::Result<()> {
 
     let page_result = page_template.run(&[&config], &mut tm, fman)?;
 
-    println!("{}", page_result);
+    if let Some(f) = clp.value_of("output") {
+        std::fs::write(f, page_result)?;
+    } else {
+        println!("{}", page_result);
+    }
 
     Ok(())
 }

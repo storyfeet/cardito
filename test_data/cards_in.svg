@@ -3,11 +3,17 @@ dave:
 .age:30
 steve:
 .age:50
-
+pete:
+.age:90
+grob:
+.age:56
+glob:
+.age:300
 {{/export}}
+{{export padding=3}}
 
 {{global card -}}
-<rect {{xywh 0 0 45 60 "mm"}} {{fl_stk "red" "black" "1mm"}}/>
+<rect {{xywh 0 0 45 60 ""}} {{fl_stk "red" "black" "1" ""}}/>
 <text>hello {{.Name}}. you are {{.age}}</text>
 {{/global}}
 

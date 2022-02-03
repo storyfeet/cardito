@@ -75,15 +75,24 @@ pub fn build_cards(clp: &ArgMatches, fman: &BasicFuncs) -> anyhow::Result<()> {
     } else {
         return e_str("No Cards supplied: use 'card_files' or 'card_string'");
     };
+}
 
+pub fn build_card_files(cards: &[Card], config: &HashMap<String, TData>) {
+    let dims = dimensions::Dimensions::new(&config);
+    let per_page = dims.per_page();
+    let pages = ((cards.len() - 1) / per_page) + 1;
+    for i in 0..pages {
+        build_card_file(&cards[i * per_page..], config)
+    }
+}
+
+pub fn build_card_file(cards: &[Card], config: &HashMap<String, TData>) {
     let ctemplate = tm.get("card").e_str("No card template provided")?.clone();
 
     let card_wrap = tm.get("card_wrap").map(|c| c.clone()).unwrap_or_else(|| {
         templito::TreeTemplate::from_str(templates::CARD_WRAP)
             .expect("Builtin Templates should work (CARD_WRAP)")
     });
-
-    let dims = dimensions::Dimensions::new(&config);
 
     let mut cards_str = String::new();
     for (i, c) in cards.into_iter().enumerate() {

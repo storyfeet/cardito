@@ -14,8 +14,8 @@ impl Spread {
 
 pub struct Dimensions {
     columns: usize,
-    /*    rows: usize,
-    pw: f64,
+    rows: usize,
+    /*pw: f64,
     ph: f64,
     cw: f64,
     ch: f64,
@@ -64,8 +64,8 @@ impl Dimensions {
             margin,
             padding,
             cw,
-            ch,
-            rows,*/
+            ch,*/
+            rows,
             columns,
             spread_x,
             spread_y,
@@ -76,5 +76,9 @@ impl Dimensions {
         let x = n % self.columns;
         let y = n / self.columns;
         (self.spread_x.pos(x), self.spread_y.pos(y))
+    }
+
+    pub fn per_page(&self) -> usize {
+        self.rows * self.columns
     }
 }

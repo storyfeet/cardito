@@ -10,11 +10,19 @@ grob:
 glob:
 .age:300
 {{/export}}
-{{export padding=3}}
+{{export 
+    padding=10;
+     
+}}
 
-{{global card -}}
+{{global front -}}
 <rect {{xywh 0 0 45 60 ""}} {{fl_stk "red" "black" "1" ""}}/>
 <text>hello {{.Name}}. you are {{.age}}</text>
+{{/global}}
+
+{{global back -}}
+<rect {{xywh 0 0 45 60 ""}} {{fl_stk "red" "black" "1" ""}}/>
+
 {{/global}}
 
 

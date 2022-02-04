@@ -1,13 +1,13 @@
+mod build_config;
 mod dimensions;
+mod template_set;
 mod templates;
 
 use card_format::Card;
 use clap::*;
 use err_tools::*;
-use std::collections::HashMap;
-use std::io::Read;
-use std::str::FromStr;
-use templito::func_man::{BasicFuncs, FuncManager, WithFuncs};
+use template_set::TemplateSet;
+use templito::func_man::{BasicFuncs, FuncManager as FMan};
 use templito::TData;
 
 fn main() -> anyhow::Result<()> {
@@ -29,17 +29,14 @@ fn main() -> anyhow::Result<()> {
         .args(&[arg!(--trusted "Give the templates ability to execute functions and read and write files")])
         .get_matches();
 
-    let mut fman = BasicFuncs::new().with_defaults();
-    if clp.is_present("trusted") {
-        fman = fman.with_exec().with_free_files();
-    }
+    let fman = build_config::func_man(&clp);
 
     if let Some(sub) = clp.subcommand_matches("funcs") {
         print_funcs(sub, &fman);
     }
 
     if let Some(sub) = clp.subcommand_matches("build") {
-        build_cards(sub, &fman)?;
+        build_cards(sub, fman)?;
     }
     Ok(())
 }
@@ -52,73 +49,31 @@ pub fn print_funcs(clp: &ArgMatches, fman: &BasicFuncs) {
     }
 }
 
-pub fn build_cards(clp: &ArgMatches, fman: &BasicFuncs) -> anyhow::Result<()> {
-    let primary: String = match clp.value_of("file") {
-        Some(fname) => std::fs::read_to_string(fname)?,
-        None => {
-            let mut s = String::new();
-            std::io::stdin()
-                .read_to_string(&mut s)
-                .e_str("No file and nothing in stdin")?;
-            s
-        }
-    };
-    let mut tm = templito::temp_man::BasicTemps::new();
-
-    let prim_tree = templito::TreeTemplate::from_str(&primary)?;
-    let (_, mut config) = prim_tree.run_exp(&[], &mut tm, fman)?;
-
-    let cards = if let Some(card_path) = config.get("card_files") {
+pub fn build_cards(clp: &ArgMatches, fman: BasicFuncs) -> anyhow::Result<()> {
+    let mut bc = build_config::BuildConfig::try_new(clp, fman)?;
+    let cards = if let Some(card_path) = bc.config.get("card_files") {
         read_cards(card_path)?
-    } else if let Some(card_string) = config.get("card_string") {
+    } else if let Some(card_string) = bc.config.get("card_string") {
         card_format::parse_cards(&card_string.to_string())?
     } else {
         return e_str("No Cards supplied: use 'card_files' or 'card_string'");
     };
-}
 
-pub fn build_card_files(cards: &[Card], config: &HashMap<String, TData>) {
-    let dims = dimensions::Dimensions::new(&config);
-    let per_page = dims.per_page();
-    let pages = ((cards.len() - 1) / per_page) + 1;
-    for i in 0..pages {
-        build_card_file(&cards[i * per_page..], config)
+    //todo spread cards
+
+    let mut done = false;
+    if let Some(tset) = TemplateSet::try_new("front", &bc.config, &mut bc.tman)? {
+        tset.build_page_files(&cards, &mut bc)?;
+        done = true;
     }
-}
-
-pub fn build_card_file(cards: &[Card], config: &HashMap<String, TData>) {
-    let ctemplate = tm.get("card").e_str("No card template provided")?.clone();
-
-    let card_wrap = tm.get("card_wrap").map(|c| c.clone()).unwrap_or_else(|| {
-        templito::TreeTemplate::from_str(templates::CARD_WRAP)
-            .expect("Builtin Templates should work (CARD_WRAP)")
-    });
-
-    let mut cards_str = String::new();
-    for (i, c) in cards.into_iter().enumerate() {
-        let (x, y) = dims.pos(i);
-        let cstr = ctemplate.run(&[&c, &config], &mut tm, fman)?;
-        let mut map = HashMap::new();
-        map.insert("current_card", TData::String(cstr));
-        map.insert("current_x", TData::Float(x));
-        map.insert("current_y", TData::Float(y));
-
-        cards_str.push_str(&card_wrap.run(&[&map, &config], &mut tm, fman)?);
+    if let Some(tset) = TemplateSet::try_new("back", &bc.config, &mut bc.tman)? {
+        tset.build_page_files(&cards, &mut bc)?;
+        done = true;
     }
 
-    config.insert("cards".to_string(), TData::String(cards_str));
-
-    let page_template = tm.get("page").map(|c| c.clone()).unwrap_or_else(|| {
-        templito::TreeTemplate::from_str(templates::PAGE_TEMPLATE)
-            .expect("Builtin templates should work (PAGE_TEMPLATE)")
-    });
-
-    let page_result = page_template.run(&[&config], &mut tm, fman)?;
-
-    if let Some(f) = clp.value_of("output") {
-        std::fs::write(f, page_result)?;
-    } else {
-        println!("{}", page_result);
+    if !done {
+        println!(r#"Nothing to make please add a global template for either "front" or "back""#);
+        println!(r#"Hint "{{{{@global front}}}}...{{{{/global}}}}"#);
     }
 
     Ok(())

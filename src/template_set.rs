@@ -88,9 +88,11 @@ impl TemplateSet {
         bc: &mut BuildConfig,
     ) -> anyhow::Result<String> {
         let s = self.build_page_string(cards, bc)?;
-        let path = self
-            .file
-            .run(&[&(&KV("page_num", n), &bc.config)], &mut bc.tman, &bc.fman)?;
+        let path = self.file.run(
+            &[&(&KV("page_number", n), &bc.config)],
+            &mut bc.tman,
+            &bc.fman,
+        )?;
         std::fs::write(&path, s)?;
         Ok(path)
     }

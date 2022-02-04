@@ -1,0 +1,29 @@
+<svg version="1.1" 
+    width="210mm" 
+    height="297mm" 
+    viewBox="0 0 210 297" 
+    xmlns="http://www.w3.org/2000/svg"
+>
+
+
+<g transform="translate(15 28.5)">
+<rect x="0" y="0" width="45" height="60" fill="green" stroke="black" stroke-width="1"/>
+
+</g>
+<g transform="translate(60 28.5)">
+<rect x="0" y="0" width="45" height="60" fill="green" stroke="black" stroke-width="1"/>
+
+</g>
+<g transform="translate(105 28.5)">
+<rect x="0" y="0" width="45" height="60" fill="green" stroke="black" stroke-width="1"/>
+
+</g>
+<g transform="translate(150 28.5)">
+<rect x="0" y="0" width="45" height="60" fill="green" stroke="black" stroke-width="1"/>
+
+</g>
+<g transform="translate(15 88.5)">
+<rect x="0" y="0" width="45" height="60" fill="green" stroke="black" stroke-width="1"/>
+
+</g>
+</svg>

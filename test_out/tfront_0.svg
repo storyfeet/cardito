@@ -1,0 +1,34 @@
+<svg version="1.1" 
+    width="210mm" 
+    height="297mm" 
+    viewBox="0 0 210 297" 
+    xmlns="http://www.w3.org/2000/svg"
+>
+
+
+<g transform="translate(15 28.5)">
+<rect x="0" y="0" width="45" height="60" fill="red" stroke="black" stroke-width="1"/>
+<text x="22.5" y="10" fill="blue" stroke="none" stroke-width="1" text-align="middle">hello dave. you are 30</text>
+
+</g>
+<g transform="translate(60 28.5)">
+<rect x="0" y="0" width="45" height="60" fill="red" stroke="black" stroke-width="1"/>
+<text x="22.5" y="10" fill="blue" stroke="none" stroke-width="1" text-align="middle">hello steve. you are 50</text>
+
+</g>
+<g transform="translate(105 28.5)">
+<rect x="0" y="0" width="45" height="60" fill="red" stroke="black" stroke-width="1"/>
+<text x="22.5" y="10" fill="blue" stroke="none" stroke-width="1" text-align="middle">hello pete. you are 90</text>
+
+</g>
+<g transform="translate(150 28.5)">
+<rect x="0" y="0" width="45" height="60" fill="red" stroke="black" stroke-width="1"/>
+<text x="22.5" y="10" fill="blue" stroke="none" stroke-width="1" text-align="middle">hello grob. you are 56</text>
+
+</g>
+<g transform="translate(15 88.5)">
+<rect x="0" y="0" width="45" height="60" fill="red" stroke="black" stroke-width="1"/>
+<text x="22.5" y="10" fill="blue" stroke="none" stroke-width="1" text-align="middle">hello glob. you are 300</text>
+
+</g>
+</svg>

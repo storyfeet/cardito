@@ -11,18 +11,20 @@ glob:
 .age:300
 {{/export}}
 {{export 
-    padding=10;
+    padding=0;
      
 }}
 
+{{global front_path}}test_out/tfront_{{.page_number}}.svg{{/global}}
 {{global front -}}
 <rect {{xywh 0 0 45 60 ""}} {{fl_stk "red" "black" "1" ""}}/>
-<text>hello {{.Name}}. you are {{.age}}</text>
+<text {{xy 22.5 10 ""}} {{fl_stk "blue" "none" "1" ""}} text-align="middle">hello {{.Name}}. you are {{.age}}</text>
 {{/global}}
 
-{{global back -}}
-<rect {{xywh 0 0 45 60 ""}} {{fl_stk "red" "black" "1" ""}}/>
 
+{{global back_path}}test_out/tback_{{.page_number}}.svg{{/global}}
+{{global back -}}
+<rect {{xywh 0 0 45 60 ""}} {{fl_stk "green" "black" "1" ""}}/>
 {{/global}}
 
 

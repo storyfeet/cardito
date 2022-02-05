@@ -1,7 +1,7 @@
 {{@export card_string}}
-dave:
+5* dave:
 .age:30
-steve:
+3*steve:
 .age:50
 pete:
 .age:90
@@ -18,7 +18,7 @@ glob:
 {{global front_path}}test_out/tfront_{{.page_number}}.svg{{/global}}
 {{global front -}}
 <rect {{xywh 0 0 45 60 ""}} {{fl_stk "red" "black" "1" ""}}/>
-<text {{xy 22.5 10 ""}} {{fl_stk "blue" "none" "1" ""}} text-align="middle">hello {{.Name}}. you are {{.age}}</text>
+<text {{xy 22.5 10 ""}} {{fl_stk "blue" "none" "1" ""}} {{font 4 "Arial"}} text-anchor="middle">hello {{.Name}}. you are {{.age}}</text>
 {{/global}}
 
 

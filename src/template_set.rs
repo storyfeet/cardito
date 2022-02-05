@@ -1,5 +1,4 @@
 use crate::build_config::BuildConfig;
-use crate::dimensions::Dimensions;
 use crate::templates;
 use card_format::Card;
 use std::collections::HashMap;
@@ -53,57 +52,74 @@ impl TemplateSet {
         }))
     }
 
-    pub fn build_page_string(
+    pub fn build_page_string<'a, IT: Iterator<Item = (usize, &'a Card)>>(
         &self,
-        cards: &[Card],
+        cards: &mut IT,
         bc: &mut BuildConfig,
-    ) -> anyhow::Result<String> {
+    ) -> anyhow::Result<Option<String>> {
         let mut cards_str = String::new();
-        for (i, c) in cards.into_iter().enumerate() {
-            let (x, y) = bc.dims.pos(i);
-            let cstr = self.card.run(&[c, &bc.config], &mut bc.tman, &bc.fman)?;
-            let mut map = HashMap::new();
-            map.insert("current_card", TData::String(cstr));
-            map.insert("current_x", TData::Float(x));
-            map.insert("current_y", TData::Float(y));
+        for i in 0..bc.dims.per_page() {
+            if let Some((_cnum, c)) = cards.next() {
+                let (x, y) = bc.dims.pos(i);
+                let cstr = self.card.run(&[c, &bc.config], &mut bc.tman, &bc.fman)?;
+                let mut map = HashMap::new();
+                map.insert("current_card", TData::String(cstr));
+                map.insert("current_x", TData::Float(x));
+                map.insert("current_y", TData::Float(y));
 
-            cards_str.push_str(
-                &self
-                    .card_wrap
-                    .run(&[&map, &bc.config], &mut bc.tman, &bc.fman)?,
-            );
+                cards_str.push_str(&self.card_wrap.run(
+                    &[&map, &bc.config],
+                    &mut bc.tman,
+                    &bc.fman,
+                )?);
+            } else {
+                if i == 0 {
+                    return Ok(None);
+                }
+                break;
+            }
         }
 
         bc.config
             .insert("cards".to_string(), TData::String(cards_str));
 
-        Ok(self.page.run(&[&bc.config], &mut bc.tman, &bc.fman)?)
+        Ok(Some(self.page.run(
+            &[&bc.config],
+            &mut bc.tman,
+            &bc.fman,
+        )?))
     }
 
     ///@return Path of written file
-    pub fn build_page_file(
+    pub fn build_page_file<'a, IT: Iterator<Item = (usize, &'a Card)>>(
         &self,
         n: usize,
-        cards: &[Card],
+        cards: &mut IT,
         bc: &mut BuildConfig,
-    ) -> anyhow::Result<String> {
-        let s = self.build_page_string(cards, bc)?;
+    ) -> anyhow::Result<Option<String>> {
+        let s = match self.build_page_string(cards, bc)? {
+            Some(s) => s,
+            None => return Ok(None),
+        };
         let path = self.file.run(
             &[&(&KV("page_number", n), &bc.config)],
             &mut bc.tman,
             &bc.fman,
         )?;
         std::fs::write(&path, s)?;
-        Ok(path)
+        Ok(Some(path))
     }
 
-    pub fn build_page_files(&self, cards: &[Card], bc: &mut BuildConfig) -> anyhow::Result<()> {
+    pub fn build_page_files<'a, IT: Iterator<Item = (usize, &'a Card)>>(
+        &self,
+        mut cards: IT,
+        bc: &mut BuildConfig,
+    ) -> anyhow::Result<()> {
         //Get the right template files
-        let dims = Dimensions::new(&bc.config);
-        let per_page = dims.per_page();
-        let pages = ((cards.len() - 1) / per_page) + 1;
-        for i in 0..pages {
-            self.build_page_file(i, &cards[i * per_page..], bc)?;
+        let mut i = 0;
+        while let Some(_s) = self.build_page_file(i, &mut cards, bc)? {
+            //TODO store written file names
+            i += 1;
         }
         Ok(())
     }

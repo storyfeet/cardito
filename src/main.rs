@@ -1,11 +1,13 @@
 mod build_config;
 mod dimensions;
+mod spread;
 mod template_set;
 mod templates;
 
 use card_format::Card;
 use clap::*;
 use err_tools::*;
+use spread::SpreadIter;
 use template_set::TemplateSet;
 use templito::func_man::{BasicFuncs, FuncManager as FMan};
 use templito::TData;
@@ -63,11 +65,12 @@ pub fn build_cards(clp: &ArgMatches, fman: BasicFuncs) -> anyhow::Result<()> {
 
     let mut done = false;
     if let Some(tset) = TemplateSet::try_new("front", &bc.config, &mut bc.tman)? {
-        tset.build_page_files(&cards, &mut bc)?;
+        tset.build_page_files(SpreadIter::new(&cards).enumerate(), &mut bc)?;
         done = true;
     }
     if let Some(tset) = TemplateSet::try_new("back", &bc.config, &mut bc.tman)? {
-        tset.build_page_files(&cards, &mut bc)?;
+        bc.set_reverse(true);
+        tset.build_page_files(SpreadIter::new(&cards).enumerate(), &mut bc)?;
         done = true;
     }
 

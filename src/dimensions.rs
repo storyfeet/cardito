@@ -23,6 +23,7 @@ pub struct Dimensions {
     margin: f64,*/
     spread_x: Spread,
     spread_y: Spread,
+    pub reverse: bool,
 }
 
 fn float_or(data: &HashMap<String, TData>, s: &str, fl: f64) -> f64 {
@@ -47,7 +48,7 @@ impl Dimensions {
     pub fn new(data: &HashMap<String, TData>) -> Self {
         let pw = float_or(data, "page_width", 210.);
         let ph = float_or(data, "page_height", 297.);
-        let margin = float_or(data, "margin", 5.);
+        let margin = float_or(data, "margin", 4.);
         let padding = float_or(data, "padding", 0.);
         let cw = float_or(data, "card_width", 45.);
         let ch = float_or(data, "card_height", 60.);
@@ -69,11 +70,15 @@ impl Dimensions {
             columns,
             spread_x,
             spread_y,
+            reverse: false,
         }
     }
 
     pub fn pos(&self, n: usize) -> (f64, f64) {
-        let x = n % self.columns;
+        let x = match self.reverse {
+            false => n % self.columns,
+            true => (self.columns - 1) - (n % self.columns),
+        };
         let y = n / self.columns;
         (self.spread_x.pos(x), self.spread_y.pos(y))
     }

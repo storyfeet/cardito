@@ -52,4 +52,7 @@ impl BuildConfig {
             dims,
         })
     }
+    pub fn set_reverse(&mut self, b: bool) {
+        self.dims.reverse = b;
+    }
 }

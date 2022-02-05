@@ -38,9 +38,12 @@ impl BuildConfig {
         };
         let prim_tree = templito::TreeTemplate::from_str(&primary)?;
 
-        let (_, config) = prim_tree.run_exp(&[], &mut tman, &fman)?;
+        let (_, mut config) = prim_tree.run_exp(&[], &mut tman, &fman)?;
 
         //Add data from clap to config
+        if let Some(s) = clp.value_of("cards") {
+            config.insert("card_files".to_string(), TData::String(s.to_string()));
+        }
 
         //finalize other parts
         let dims = Dimensions::new(&config);

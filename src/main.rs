@@ -96,6 +96,6 @@ pub fn read_cards(data: &TData) -> anyhow::Result<Vec<Card>> {
             let cards = card_format::parse_cards(&f)?;
             Ok(cards)
         }
-        _ => unimplemented! {},
+        _ => e_str("Cards must be either a filename or list thereof"),
     }
 }

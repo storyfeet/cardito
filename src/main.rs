@@ -27,6 +27,7 @@ fn main() -> anyhow::Result<()> {
             arg!(-t --templates [templates] "The file or folder where utility templates are found"),
             arg!(-c --cards [cards] "The card file"),
             arg!(-o --output [out_file] "The file to write the output to"),
+            arg!(-v --vars [vars] ... r#"K V pairs of values interpreted as Template data eg name:"pete""#).max_values(100),
         ]))
         .args(&[arg!(--trusted "Give the templates ability to execute functions and read and write files")])
         .get_matches();

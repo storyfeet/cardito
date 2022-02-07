@@ -26,8 +26,16 @@ impl BuildConfig {
     pub fn try_new(clp: &ArgMatches, fman: BasicFuncs) -> anyhow::Result<Self> {
         let mut tman = TMan::new();
 
+        let mut init_data = HashMap::new();
+
         let primary: String = match clp.value_of("file") {
-            Some(fname) => std::fs::read_to_string(fname)?,
+            Some(fname) => {
+                init_data.insert(
+                    "template_path".to_string(),
+                    TData::String(fname.to_string()),
+                );
+                std::fs::read_to_string(fname)?
+            }
             None => {
                 let mut s = String::new();
                 std::io::stdin()
@@ -36,9 +44,26 @@ impl BuildConfig {
                 s
             }
         };
+
+        if let Some(mut vals) = clp.values_of("vars") {
+            while let Some(k) = vals.next() {
+                match vals.next() {
+                    Some(v) => {
+                        let nval =
+                            TData::from_str(v).unwrap_or_else(|_| TData::String(v.to_string()));
+                        init_data.insert(k.to_string(), nval);
+                    }
+                    None => return e_str("for --vars keys must have values").into(),
+                }
+            }
+        }
+
         let prim_tree = templito::TreeTemplate::from_str(&primary)?;
 
-        let (_, mut config) = prim_tree.run_exp(&[], &mut tman, &fman)?;
+        let (_, mut config) = prim_tree.run_exp(&[&init_data], &mut tman, &fman)?;
+        for (k, v) in init_data {
+            config.insert(k, v);
+        }
 
         //Add data from clap to config
         if let Some(s) = clp.value_of("cards") {

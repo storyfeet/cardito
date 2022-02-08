@@ -23,14 +23,20 @@ impl TemplateSet {
             None => return Ok(None),
         };
         let kind_fname = format!("{}_path", kind);
+        let kind_temp = format!("{}_temp", kind);
 
         let file = match tman.get(&kind_fname) {
             Some(s) => s.clone(),
             None => {
                 let st = config
-                    .get(&kind_fname)
-                    .map(|d| format!("{}{{{{}}}}.svg", d))
-                    .unwrap_or(format!("out/{}{{{{$n}}}}.svg", kind));
+                    .get(&kind_temp)
+                    .map(|t| t.to_string())
+                    .or_else(|| {
+                        config
+                            .get(&kind_fname)
+                            .map(|d| format!("{}{{{{$page_number}}}}.svg", d))
+                    })
+                    .unwrap_or(format!("out/{}{{{{$page_number}}}}.svg", kind));
                 TreeTemplate::from_str(&st)?
             }
         };

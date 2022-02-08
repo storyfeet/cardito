@@ -28,6 +28,11 @@ fn main() -> anyhow::Result<()> {
             arg!(-c --cards [cards] "The card file"),
             arg!(-o --output [out_file] "The file to write the output to"),
             arg!(-v --vars [vars] ... r#"K V pairs of values interpreted as Template data eg name:"pete""#).max_values(100),
+            arg!(--fpath [fpath] "The base path for card fronts to go ({{$page_num}}.svg will be appended)"),
+            arg!(--bpath [fpath] "The base path for card backs to go ({{$page_num}}.svg will be appended)"),
+            arg!(--fpath_temp [fpath_temp] "A Template describing where the front files will output"),
+            arg!(--bpath_temp [fpath_temp] "A Template describing where the back files will output"),
+
         ]))
         .args(&[arg!(--trusted "Give the templates ability to execute functions and read and write files")])
         .get_matches();

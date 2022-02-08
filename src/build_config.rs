@@ -4,7 +4,9 @@ use err_tools::*;
 use std::collections::HashMap;
 use std::io::Read;
 use std::str::FromStr;
-use templito::{func_man::BasicFuncs, temp_man::BasicTemps as TMan, TData, WithFuncs};
+use templito::{
+    func_man::BasicFuncs, temp_man::BasicTemps as TMan, TData, TreeTemplate, WithFuncs,
+};
 
 pub struct BuildConfig {
     pub config: HashMap<String, TData>,
@@ -68,6 +70,24 @@ impl BuildConfig {
         //Add data from clap to config
         if let Some(s) = clp.value_of("cards") {
             config.insert("card_files".to_string(), TData::String(s.to_string()));
+        }
+        if let Some(s) = clp.value_of("fpath") {
+            config.insert("front_path".to_string(), TData::String(s.to_string()));
+        }
+        if let Some(s) = clp.value_of("bpath") {
+            config.insert("back_path".to_string(), TData::String(s.to_string()));
+        }
+        if let Some(s) = clp.value_of("fpath_temp") {
+            config.insert(
+                "front_temp".to_string(),
+                TData::Template(TreeTemplate::from_str(s)?),
+            );
+        }
+        if let Some(s) = clp.value_of("bpath_temp") {
+            config.insert(
+                "back_temp".to_string(),
+                TData::Template(TreeTemplate::from_str(s)?),
+            );
         }
 
         //finalize other parts

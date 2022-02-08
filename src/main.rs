@@ -22,6 +22,10 @@ fn main() -> anyhow::Result<()> {
                 .about("print available funcs")
                 .args(&[arg!(-f --filter [filter] "A string to filter commands by")]),
         )
+        .subcommand(
+            App::new("keywords")
+                .about("explain keywords and their usage in cardito")
+        )
         .subcommand(App::new("build").about("build cards to svg").args(&[
             arg!(-f --file [file_name] "The primary template file"),
             arg!(-t --templates [templates] "The file or folder where utility templates are found"),
@@ -37,6 +41,10 @@ fn main() -> anyhow::Result<()> {
         .args(&[arg!(--trusted "Give the templates ability to execute functions and read and write files")])
         .get_matches();
 
+    if let Some(_sub) = clp.subcommand_matches("keywords") {
+        println!("{}", std::include_str!("text/keywords.md"));
+    }
+
     let fman = build_config::func_man(&clp);
 
     if let Some(sub) = clp.subcommand_matches("funcs") {
@@ -46,6 +54,7 @@ fn main() -> anyhow::Result<()> {
     if let Some(sub) = clp.subcommand_matches("build") {
         build_cards(sub, fman)?;
     }
+
     Ok(())
 }
 

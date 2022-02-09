@@ -26,6 +26,14 @@ fn main() -> anyhow::Result<()> {
             App::new("keywords")
                 .about("explain keywords and their usage in cardito")
         )
+        .subcommand(
+            App::new("init")
+                .about("Create a new basic template file and dummy cards")
+                .args(&[
+                    arg!(-f --file [file_name]),
+                    arg!(-c --cards [card_file]),
+                ])
+        )
         .subcommand(App::new("build").about("build cards to svg").args(&[
             arg!(-f --file [file_name] "The primary template file"),
             arg!(-t --templates [templates] "The file or folder where utility templates are found"),
@@ -114,4 +122,19 @@ pub fn read_cards(data: &TData) -> anyhow::Result<Vec<Card>> {
         }
         _ => e_str("Cards must be either a filename or list thereof"),
     }
+}
+
+pub fn init(clp: &ArgMatches) -> anyhow::Result<()> {
+    let card_file = clp.value_of("file").unwrap_or("cards.crd");
+    let main_file = clp.value_of("cards").unwrap_or("main.ito");
+
+    let s = include_str!("text/basic.ito");
+    let s2 = s.replace("<card_file>", card_file);
+
+    if !std::fs::metadata(card_file).is_ok() {
+        std::fs::write(card_file, include_str!("text/dummy_cards.crd"))?;
+    }
+    std::fs::write(main_file, s2)?;
+
+    Ok(())
 }

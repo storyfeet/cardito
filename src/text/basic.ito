@@ -1,5 +1,5 @@
 {{export 
-    card_files = ["cards.crd"];
+    card_files = ["<card_file>"];
     card_width = 45;
     card_height= 60;
     padding = 1;

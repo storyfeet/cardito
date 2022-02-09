@@ -68,6 +68,7 @@ pub fn print_funcs(clp: &ArgMatches, fman: &BasicFuncs) {
 
 pub fn build_cards(clp: &ArgMatches, fman: BasicFuncs) -> anyhow::Result<()> {
     let mut bc = build_config::BuildConfig::try_new(clp, fman)?;
+
     let cards = if let Some(card_path) = bc.config.get("card_files") {
         read_cards(card_path)?
     } else if let Some(card_string) = bc.config.get("card_string") {

@@ -65,7 +65,6 @@ card_wrap (config)
 
 
 
-
 Optional Exports
 ===============
 
@@ -103,7 +102,6 @@ front_path  && back_path : string
 
     The output path for the front and back files  '{{$page_number}}.svg' will be appended so the files don't overlap
     Only used if a template is not provided
-    
     
     
 extra

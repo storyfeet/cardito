@@ -30,8 +30,9 @@ fn main() -> anyhow::Result<()> {
             App::new("init")
                 .about("Create a new basic template file and dummy cards")
                 .args(&[
-                    arg!(-f --file [file_name]),
-                    arg!(-c --cards [card_file]),
+                    arg!(-f --folder [folder] "The folder to create the files in"),
+                    arg!(-t --temp [temp] "The template's name"),
+                    arg!(-c --cards [card_file] "The name of the card file" ),
                 ])
         )
         .subcommand(App::new("build").about("build cards to svg").args(&[
@@ -130,16 +131,20 @@ pub fn read_cards(data: &TData) -> anyhow::Result<Vec<Card>> {
 }
 
 pub fn init(clp: &ArgMatches) -> anyhow::Result<()> {
-    let card_file = clp.value_of("file").unwrap_or("cards.crd");
-    let main_file = clp.value_of("cards").unwrap_or("main.ito");
+    let folder = clp.value_of("folder").unwrap_or("");
+    let card_file = clp.value_of("cards").unwrap_or("cards.crd");
+    let temp_file = clp.value_of("temp").unwrap_or("main.ito");
 
     let s = include_str!("text/basic.ito");
     let s2 = s.replace("<card_file>", card_file);
 
-    if !std::fs::metadata(card_file).is_ok() {
-        std::fs::write(card_file, include_str!("text/dummy_cards.crd"))?;
+    std::fs::create_dir_all(folder)?;
+    let card_path = std::path::PathBuf::from(folder).join(card_file);
+    if !std::fs::metadata(&card_path).is_ok() {
+        std::fs::write(&card_path, include_str!("text/dummy_cards.crd"))?;
     }
-    std::fs::write(main_file, s2)?;
+    let temp_path = std::path::PathBuf::from(folder).join(temp_file);
+    std::fs::write(&temp_path, s2)?;
 
     Ok(())
 }

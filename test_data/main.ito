@@ -1,0 +1,21 @@
+{{export 
+    card_files = ["cards.crd"];
+    card_width = 45;
+    card_height= 60;
+    padding = 1;
+    margin=4;
+}}
+
+{{@export extra -}}
+    {{# Anything to appear on every page once #}}
+{{- /export}}
+
+{{global front}}
+    <rect {{xywh 0 0 45 60}} {{fl_stk .color "black" 2}} />
+    <text {{font 3 "Arial"}} {{xy 22.5 20}} text-anchor="middle" {{fl_stk "black" "none" 0}}>{{.Name}}:£{{.price}}</text>
+{{/global}}
+
+{{global back}}
+    <rect {{xywh 0 0 45 60}} {{fl_stk "blue" "black" 2}} />
+{{/global}}
+

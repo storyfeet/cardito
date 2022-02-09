@@ -90,6 +90,10 @@ impl BuildConfig {
             );
         }
 
+        //Run function imports
+
+        if let Some(s) = c
+
         //finalize other parts
         let dims = Dimensions::new(&config);
 

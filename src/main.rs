@@ -45,6 +45,7 @@ fn main() -> anyhow::Result<()> {
             arg!(--bpath [fpath] "The base path for card backs to go ({{.page_number}}.svg will be appended)"),
             arg!(--fpath_temp [fpath_temp] "A Template describing where the front files will output"),
             arg!(--bpath_temp [fpath_temp] "A Template describing where the back files will output"),
+            arg!(-i --imports [imports] "Location of any templates to with global functions"),
 
         ]))
         .args(&[arg!(--trusted "Give the templates ability to execute functions and read and write files")])

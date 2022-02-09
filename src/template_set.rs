@@ -34,9 +34,9 @@ impl TemplateSet {
                     .or_else(|| {
                         config
                             .get(&kind_fname)
-                            .map(|d| format!("{}{{{{$page_number}}}}.svg", d))
+                            .map(|d| format!("{}{{{{.page_number}}}}.svg", d))
                     })
-                    .unwrap_or(format!("out/{}{{{{$page_number}}}}.svg", kind));
+                    .unwrap_or(format!("out/{}{{{{.page_number}}}}.svg", kind));
                 TreeTemplate::from_str(&st)?
             }
         };

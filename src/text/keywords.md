@@ -52,11 +52,11 @@ page (config)
 
 front_temp (config)
 -------
-    A template describing the file out path.  default = "out/front_{{$page_number}}.svg"
+    A template describing the file out path.  default = "out/front_{{.page_number}}.svg"
 
 back_temp (config)
 -------
-    A template describing the file out path.  default = "out/back_{{$page_number}}.svg"
+    A template describing the file out path.  default = "out/back_{{.page_number}}.svg"
 
 card_wrap (config)
 ---------
@@ -100,7 +100,7 @@ padding : number
 front_path  && back_path : string
 --------
 
-    The output path for the front and back files  '{{$page_number}}.svg' will be appended so the files don't overlap
+    The output path for the front and back files  '{{.page_number}}.svg' will be appended so the files don't overlap
     Only used if a template is not provided
     
     

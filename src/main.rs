@@ -40,8 +40,8 @@ fn main() -> anyhow::Result<()> {
             arg!(-c --cards [cards] "The card file"),
             arg!(-o --output [out_file] "The file to write the output to"),
             arg!(-v --vars [vars] ... r#"K V pairs of values interpreted as Template data eg name:"pete""#).max_values(100),
-            arg!(--fpath [fpath] "The base path for card fronts to go ({{$page_num}}.svg will be appended)"),
-            arg!(--bpath [fpath] "The base path for card backs to go ({{$page_num}}.svg will be appended)"),
+            arg!(--fpath [fpath] "The base path for card fronts to go ({{.page_number}}.svg will be appended)"),
+            arg!(--bpath [fpath] "The base path for card backs to go ({{.page_number}}.svg will be appended)"),
             arg!(--fpath_temp [fpath_temp] "A Template describing where the front files will output"),
             arg!(--bpath_temp [fpath_temp] "A Template describing where the back files will output"),
 
@@ -51,6 +51,11 @@ fn main() -> anyhow::Result<()> {
 
     if let Some(_sub) = clp.subcommand_matches("keywords") {
         println!("{}", std::include_str!("text/keywords.md"));
+    }
+
+    if let Some(sub) = clp.subcommand_matches("init") {
+        init(sub)?;
+        return Ok(());
     }
 
     let fman = build_config::func_man(&clp);

@@ -11,11 +11,11 @@
 {{- /export}}
 
 {{global front}}
-    <rect {{xywh 0 0 45 60}} {{fl-stk .color "black" 2}} />
-    <text {{font 3 "Arial"}} {{xy 22.5 20}} text-anchor="middle" {{fl-stk "green" "none" 0>{{.Name}}:£{{.price}}</text>
+    <rect {{xywh 0 0 45 60}} {{fl_stk .color "black" 2}} />
+    <text {{font 3 "Arial"}} {{xy 22.5 20}} text-anchor="middle" {{fl_stk "black" "none" 0}}>{{.Name}}:£{{.price}}</text>
 {{/global}}
 
 {{global back}}
-    <rect {{xywh 0 0 45 60}} {{fl-stk "blue" "black" 2}} />
+    <rect {{xywh 0 0 45 60}} {{fl_stk "blue" "black" 2}} />
 {{/global}}
 

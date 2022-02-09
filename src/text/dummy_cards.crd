@@ -1,7 +1,7 @@
-params price
+param price
 
-2*Apple 100:
+2*Apple ,100:
 .color : "red"
 
-3*Pear 50:
+3*Pear, 50:
 .color : "green"

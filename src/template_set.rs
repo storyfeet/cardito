@@ -120,13 +120,14 @@ impl TemplateSet {
         &self,
         mut cards: IT,
         bc: &mut BuildConfig,
-    ) -> anyhow::Result<()> {
+    ) -> anyhow::Result<Vec<String>> {
         //Get the right template files
         let mut i = 0;
-        while let Some(_s) = self.build_page_file(i, &mut cards, bc)? {
-            //TODO store written file names
+        let mut res = Vec::new();
+        while let Some(s) = self.build_page_file(i, &mut cards, bc)? {
+            res.push(s);
             i += 1;
         }
-        Ok(())
+        Ok(res)
     }
 }

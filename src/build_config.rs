@@ -92,7 +92,9 @@ impl BuildConfig {
 
         //Run function imports
 
-        if let Some(s) = c
+        if let Some(s) = config.get("imports") {
+            crate::imports::import_templates_tdata(s, &mut tman, &fman)?;
+        }
 
         //finalize other parts
         let dims = Dimensions::new(&config);

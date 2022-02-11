@@ -96,14 +96,21 @@ pub fn build_cards(clp: &ArgMatches, fman: BasicFuncs) -> anyhow::Result<()> {
     //todo spread cards
 
     let mut done = false;
+    let mut flist = Vec::new();
     if let Some(tset) = TemplateSet::try_new("front", &bc.config, &mut bc.tman)? {
-        tset.build_page_files(SpreadIter::new(&cards).enumerate(), &mut bc)?;
+        flist = tset.build_page_files(SpreadIter::new(&cards).enumerate(), &mut bc)?;
         done = true;
     }
+
+    let mut blist = Vec::new();
     if let Some(tset) = TemplateSet::try_new("back", &bc.config, &mut bc.tman)? {
         bc.set_reverse(true);
-        tset.build_page_files(SpreadIter::new(&cards).enumerate(), &mut bc)?;
+        blist = tset.build_page_files(SpreadIter::new(&cards).enumerate(), &mut bc)?;
         done = true;
+    }
+
+    for f in itertools::interleave(flist, blist) {
+        println!("{}", f);
     }
 
     if !done {

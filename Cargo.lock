@@ -632,6 +632,8 @@ dependencies = [
 [[package]]
 name = "templito"
 version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1bfcccb6aa64a8312013f3ddcc5b9fe789e58d987a918fadf8d59043fd4d1562"
 dependencies = [
  "anyhow",
  "base64",

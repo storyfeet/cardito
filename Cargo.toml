@@ -2,11 +2,14 @@
 name = "cardito"
 version = "0.1.0"
 edition = "2021"
+license = "MIT"
+keywords = ["card","game","generate","svg","template"]
+description = "Build svg playing cards from a template"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-templito = {path="../../mlibs/templito/"}
+templito = "0.2.0" #{path="../../mlibs/templito/"}
 clap = {version ="3.0.13",features=["cargo"]}
 err_tools = "0.1.1"
 anyhow = "1.0.53"

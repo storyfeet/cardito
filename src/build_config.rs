@@ -83,6 +83,12 @@ impl BuildConfig {
                 TData::Template(TreeTemplate::from_str(s)?),
             );
         }
+
+        if let Some(vv) = clp.values_of("imports") {
+            for v in vv {
+                crate::imports::import_templates(v, &mut tman, &fman)?;
+            }
+        }
         if let Some(s) = clp.value_of("bpath_temp") {
             config.insert(
                 "back_temp".to_string(),

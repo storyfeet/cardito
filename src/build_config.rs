@@ -89,6 +89,7 @@ impl BuildConfig {
                 crate::imports::import_templates(v, &mut tman, &fman)?;
             }
         }
+
         if let Some(s) = clp.value_of("bpath_temp") {
             config.insert(
                 "back_temp".to_string(),

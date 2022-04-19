@@ -14,21 +14,21 @@ use templito::func_man::{BasicFuncs, FuncManager as FMan};
 use templito::TData;
 
 fn main() -> anyhow::Result<()> {
-    let clp = App::new("Cardito")
+    let clp = Command::new("Cardito")
         .version(crate_version!())
         .about("Build Cards into a pdf from a templito template")
         .author("Matthew Stoodley")
         .subcommand(
-            App::new("funcs")
+            Command::new("funcs")
                 .about("print available funcs")
                 .args(&[arg!(-f --filter [filter] "A string to filter commands by")]),
         )
         .subcommand(
-            App::new("keywords")
+            Command::new("keywords")
                 .about("explain keywords and their usage in cardito")
         )
         .subcommand(
-            App::new("init")
+            Command::new("init")
                 .about("Create a new basic template file and dummy cards")
                 .args(&[
                     arg!(-f --folder [folder] "The folder to create the files in"),
@@ -36,7 +36,7 @@ fn main() -> anyhow::Result<()> {
                     arg!(-c --cards [card_file] "The name of the card file" ),
                 ])
         )
-        .subcommand(App::new("build").about("build cards to svg").args(&[
+        .subcommand(Command::new("build").about("build cards to svg").args(&[
             arg!(-f --file [file_name] "The primary template file"),
             arg!(-t --templates [templates] "The file or folder where utility templates are found"),
             arg!(-c --cards [cards] "The card file"),

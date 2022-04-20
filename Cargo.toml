@@ -5,7 +5,7 @@ edition = "2021"
 license = "MIT"
 keywords = ["card","game","generate","svg","template"]
 description = "Build svg playing cards from a template"
-repository = "github.com/storyfeet/cardito"
+repository = "https::/github.com/storyfeet/cardito"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

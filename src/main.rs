@@ -40,7 +40,7 @@ fn main() -> anyhow::Result<()> {
             arg!(-f --file [file_name] "The primary template file"),
             arg!(-t --templates [templates] "The file or folder where utility templates are found"),
             arg!(-c --cards [cards] "The card file"),
-            arg!(-o --output [out_file] "The file to write the output to"),
+            //arg!(-o --output [out_file] "The file to write the output to"),
             arg!(-v --vars [vars] ... r#"K V pairs of values interpreted as Template data eg name:"pete""#).max_values(100),
             arg!(--fpath [fpath] "The base path for card fronts to go ({{.page_number}}.svg will be appended)"),
             arg!(--bpath [fpath] "The base path for card backs to go ({{.page_number}}.svg will be appended)"),
@@ -131,7 +131,8 @@ pub fn read_cards(data: &TData) -> anyhow::Result<Vec<Card>> {
             Ok(res)
         }
         TData::String(fname) => {
-            let f = std::fs::read_to_string(fname)?;
+            let f = std::fs::read_to_string(fname)
+                .e_string(format!("Could not read file {}", fname))?;
             let cards = card_format::parse_cards(&f)?;
             Ok(cards)
         }

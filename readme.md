@@ -40,7 +40,7 @@ main.ito:
 and cards.crd
 
 ```
-param price
+@param price
 
 2*Apple ,100:
 .color : "red"
@@ -54,4 +54,18 @@ Edit the files to discribe the cards you want.
 Then call ```cardito build -f main.ito```
 
 This will output svgs with the cards laid out nicely
+
+
+## Change Log
+
+v 0.2.0 
+
+Now uses updated Card Format and updated Templito Format.
+to update:
+
+param => @param
+var => no longer exists as it was not useful, but you can use @def to create a base case.
+default => @def
+@const now creates a single value, which can be used in future cards with a $
+
 

@@ -36,7 +36,7 @@ impl BuildConfig {
                     "template_path".to_string(),
                     TData::String(fname.to_string()),
                 );
-                std::fs::read_to_string(fname)?
+                std::fs::read_to_string(fname).e_string(format!("Cannot read file {:?}", fname))?
             }
             None => {
                 let mut s = String::new();

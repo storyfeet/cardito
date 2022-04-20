@@ -1,6 +1,7 @@
 use crate::build_config::BuildConfig;
 use crate::templates;
 use card_format::Card;
+use err_tools::*;
 use std::collections::HashMap;
 use std::str::FromStr;
 use templito::{temp_man::BasicTemps as TMan, TData, TreeTemplate, KV};
@@ -112,7 +113,7 @@ impl TemplateSet {
             &mut bc.tman,
             &bc.fman,
         )?;
-        std::fs::write(&path, s)?;
+        std::fs::write(&path, s).e_string(format!("cannot write file {:?}", &path))?;
         Ok(Some(path))
     }
 

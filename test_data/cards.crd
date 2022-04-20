@@ -1,4 +1,4 @@
-param price
+@param price
 
 2*Apple ,100:
 .color : "red"

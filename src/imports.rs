@@ -1,3 +1,4 @@
+use err_tools::*;
 use std::path::PathBuf;
 use std::str::FromStr;
 use templito::{func_man::BasicFuncs, temp_man::BasicTemps as TMan, TData, TreeTemplate};
@@ -20,7 +21,7 @@ pub fn import_templates_tdata(d: &TData, tman: &mut TMan, fman: &BasicFuncs) -> 
 pub fn import_templates(s: &str, tman: &mut TMan, fman: &BasicFuncs) -> anyhow::Result<()> {
     let w = Walker::new(PathBuf::from(s));
     for f in w {
-        let s = std::fs::read_to_string(f)?;
+        let s = std::fs::read_to_string(&f).e_string(format!("could not read file {:?}", f))?;
         let tt = TreeTemplate::from_str(&s)?;
         tt.run(&[], tman, fman)?;
     }

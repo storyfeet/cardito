@@ -115,9 +115,9 @@ dependencies = [
 
 [[package]]
 name = "clap"
-version = "3.1.9"
+version = "3.1.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6aad2534fad53df1cc12519c5cda696dd3e20e6118a027e24054aea14a0bdcbe"
+checksum = "3124f3f75ce09e22d1410043e1e24f2ecc44fad3afe4f08408f1f7663d68da2b"
 dependencies = [
  "atty",
  "bitflags",
@@ -636,7 +636,9 @@ dependencies = [
 
 [[package]]
 name = "templito"
-version = "0.3.0"
+version = "0.4.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "df2d42c54cd1a00bb47807d7f830c462ad57cf9360f664285640aca61230b43a"
 dependencies = [
  "anyhow",
  "base64",

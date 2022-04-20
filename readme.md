@@ -69,3 +69,16 @@ default => @def
 @const now creates a single value, which can be used in future cards with a $
 
 
+Templito templates should still work but now allow for Map based patterns, and "as" can be used.
+
+```
+{{as $a:PATTERN}}job{{/as}}
+
+is shorthand for 
+
+{{switch $a}}{{case PATTERN}}job{{switch}}
+
+```
+
+
+

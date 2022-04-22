@@ -1,6 +1,6 @@
 [package]
 name = "cardito"
-version = "0.2.0"
+version = "0.2.1"
 edition = "2021"
 license = "MIT"
 keywords = ["card","game","generate","svg","template"]
@@ -10,7 +10,7 @@ repository = "https://github.com/storyfeet/cardito"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-templito = "0.4.1" 
+templito = "0.4.2" 
 #templito ={path="../../mlibs/templito/"}
 clap = {version ="3.0.13",features=["cargo"]}
 err_tools = "0.1.1"

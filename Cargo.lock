@@ -25,9 +25,9 @@ dependencies = [
 
 [[package]]
 name = "anyhow"
-version = "1.0.56"
+version = "1.0.57"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4361135be9122e0870de935d7c439aef945b9f9ddd4199a553b5270b49c82a27"
+checksum = "08f9b8508dccb7687a1d6c4ce66b2b0ecef467c94667de27d8d7fe1f8d2a9cdc"
 
 [[package]]
 name = "atty"
@@ -84,7 +84,7 @@ dependencies = [
 
 [[package]]
 name = "cardito"
-version = "0.1.0"
+version = "0.2.1"
 dependencies = [
  "anyhow",
  "card_format",
@@ -115,9 +115,9 @@ dependencies = [
 
 [[package]]
 name = "clap"
-version = "3.1.10"
+version = "3.1.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3124f3f75ce09e22d1410043e1e24f2ecc44fad3afe4f08408f1f7663d68da2b"
+checksum = "423af4bd829996d7de0b8bf0279f5b91a20306937be514e972a95c3d3ab13f33"
 dependencies = [
  "atty",
  "bitflags",
@@ -636,9 +636,9 @@ dependencies = [
 
 [[package]]
 name = "templito"
-version = "0.4.1"
+version = "0.4.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "df2d42c54cd1a00bb47807d7f830c462ad57cf9360f664285640aca61230b43a"
+checksum = "a5baffe5314a37f312002338a18882b111c7cd5eb7060316b65c2fb8575a77e3"
 dependencies = [
  "anyhow",
  "base64",
@@ -770,9 +770,9 @@ checksum = "1a143597ca7c7793eff794def352d41792a93c481eb1042423ff7ff72ba2c31f"
 
 [[package]]
 name = "weezl"
-version = "0.1.5"
+version = "0.1.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d8b77fdfd5a253be4ab714e4ffa3c49caf146b4de743e97510c0656cf90f1e8e"
+checksum = "9c97e489d8f836838d497091de568cf16b117486d529ec5579233521065bd5e4"
 
 [[package]]
 name = "winapi"

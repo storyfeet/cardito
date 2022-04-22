@@ -84,7 +84,7 @@ dependencies = [
 
 [[package]]
 name = "cardito"
-version = "0.2.1"
+version = "0.2.2"
 dependencies = [
  "anyhow",
  "card_format",
@@ -636,9 +636,9 @@ dependencies = [
 
 [[package]]
 name = "templito"
-version = "0.4.2"
+version = "0.4.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a5baffe5314a37f312002338a18882b111c7cd5eb7060316b65c2fb8575a77e3"
+checksum = "aeae02d52ef122ba18e07ab9b42f3f52cb82f8c26a57f026d9dbf8935dae2d0b"
 dependencies = [
  "anyhow",
  "base64",

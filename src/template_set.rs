@@ -68,7 +68,10 @@ impl TemplateSet {
         for i in 0..bc.dims.per_page() {
             if let Some((_cnum, c)) = cards.next() {
                 let (x, y) = bc.dims.pos(i);
-                let cstr = self.card.run(&[c, &bc.config], &mut bc.tman, &bc.fman)?;
+                let cstr = self
+                    .card
+                    .run(&[c, &bc.config], &mut bc.tman, &bc.fman)
+                    .e_string(format!("On Card : {}", c.name))?;
                 let mut map = HashMap::new();
                 map.insert("current_card", TData::String(cstr));
                 map.insert("current_x", TData::Float(x));

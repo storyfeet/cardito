@@ -59,20 +59,23 @@ impl TemplateSet {
         }))
     }
 
-    pub fn build_page_string<'a, IT: Iterator<Item = (usize, &'a Card)>>(
+    pub fn build_page_string<'a, IT: Iterator<Item = (usize, (&'a Card, usize, usize))>>(
         &self,
         cards: &mut IT,
         bc: &mut BuildConfig,
     ) -> anyhow::Result<Option<String>> {
         let mut cards_str = String::new();
         for i in 0..bc.dims.per_page() {
-            if let Some((_cnum, c)) = cards.next() {
+            if let Some((cnum, (c, cpos, this_card_num))) = cards.next() {
                 let (x, y) = bc.dims.pos(i);
+                let mut map = HashMap::new();
+                map.insert("card_num", TData::UInt(cnum));
+                map.insert("type_num", TData::UInt(cpos));
+                map.insert("type_nth", TData::UInt(this_card_num));
                 let cstr = self
                     .card
-                    .run(&[c, &bc.config], &mut bc.tman, &bc.fman)
+                    .run(&[c, &bc.config, &map], &mut bc.tman, &bc.fman)
                     .e_string(format!("On Card : {}", c.name))?;
-                let mut map = HashMap::new();
                 map.insert("current_card", TData::String(cstr));
                 map.insert("current_x", TData::Float(x));
                 map.insert("current_y", TData::Float(y));
@@ -101,7 +104,7 @@ impl TemplateSet {
     }
 
     ///@return Path of written file
-    pub fn build_page_file<'a, IT: Iterator<Item = (usize, &'a Card)>>(
+    pub fn build_page_file<'a, IT: Iterator<Item = (usize, (&'a Card, usize, usize))>>(
         &self,
         n: usize,
         cards: &mut IT,
@@ -120,7 +123,7 @@ impl TemplateSet {
         Ok(Some(path))
     }
 
-    pub fn build_page_files<'a, IT: Iterator<Item = (usize, &'a Card)>>(
+    pub fn build_page_files<'a, IT: Iterator<Item = (usize, (&'a Card, usize, usize))>>(
         &self,
         mut cards: IT,
         bc: &mut BuildConfig,

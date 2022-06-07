@@ -14,12 +14,12 @@ impl<'a> SpreadIter<'a> {
 }
 
 impl<'a> Iterator for SpreadIter<'a> {
-    type Item = &'a Card;
+    type Item = (&'a Card, usize, usize);
     fn next(&mut self) -> Option<Self::Item> {
         loop {
             if self.n > 0 {
                 self.n -= 1;
-                return self.cards.get(self.pos);
+                return self.cards.get(self.pos).map(|c| (c, self.pos, self.n));
             }
             self.pos += 1;
             self.n = self.cards.get(self.pos)?.num;

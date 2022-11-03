@@ -47,7 +47,9 @@ fn main() -> anyhow::Result<()> {
             arg!(--fpath_temp [fpath_temp] "A Template describing where the front files will output"),
             arg!(--bpath_temp [fpath_temp] "A Template describing where the back files will output"),
             arg!(-i --imports [imports] "Location of any templates to with global functions").max_values(100),
-
+        ]))
+        .subcommand(Command::new("table").about("Print table of key values").args(&[
+                arg!(<card_file> "The name of the card file" ),
         ]))
         .args(&[arg!(--trusted "Give the templates ability to execute functions and read and write files")])
         .get_matches();
@@ -60,6 +62,9 @@ fn main() -> anyhow::Result<()> {
         init(sub)?;
         return Ok(());
     }
+    if let Some(sub) = clp.subcommand_matches("table") {
+        build_table(sub)?;
+    }
 
     let fman = build_config::func_man(&clp);
 
@@ -70,6 +75,7 @@ fn main() -> anyhow::Result<()> {
     if let Some(sub) = clp.subcommand_matches("build") {
         build_cards(sub, fman)?;
     }
+
 
     Ok(())
 }
@@ -155,6 +161,22 @@ pub fn init(clp: &ArgMatches) -> anyhow::Result<()> {
     }
     let temp_path = std::path::PathBuf::from(folder).join(temp_file);
     std::fs::write(&temp_path, s2)?;
+
+    Ok(())
+}
+
+pub fn build_table(clp:&ArgMatches) -> anyhow::Result<()>{
+    let f = clp.value_of("card_file").e_str("No Card File Provided")?;
+    let cf = std::fs::read_to_string(f)?;
+    let cl = card_format::parse_cards(&cf)?;
+
+    for (n,c) in cl.iter().enumerate() {
+        println!("{:2} : {}",n,c.name);
+    }
+
+
+    
+
 
     Ok(())
 }

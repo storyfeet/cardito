@@ -90,7 +90,7 @@ dependencies = [
  "card_format",
  "clap",
  "err_tools",
- "itertools",
+ "itertools 0.10.3",
  "templito",
 ]
 
@@ -137,6 +137,12 @@ checksum = "a37c35f1112dad5e6e0b1adaff798507497a18fceeb30cceb3bae7d1427b9213"
 dependencies = [
  "os_str_bytes",
 ]
+
+[[package]]
+name = "clone_dyn_types"
+version = "0.26.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0c23e9c07455288757e5142aaeb0e999f9f34dd2d3c27c9b5f8e3f85f4cb1eda"
 
 [[package]]
 name = "color_quant"
@@ -315,10 +321,29 @@ dependencies = [
 ]
 
 [[package]]
+name = "iter_tools"
+version = "0.24.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "49a92afdf43693047a6079d379c88064970968bd6552a10f45c135a1c29e1094"
+dependencies = [
+ "clone_dyn_types",
+ "itertools 0.11.0",
+]
+
+[[package]]
 name = "itertools"
 version = "0.10.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a9a9d19fa1e79b6215ff29b9d6880b706147f16e9b1dbb1e4e5947b5b02bc5e3"
+dependencies = [
+ "either",
+]
+
+[[package]]
+name = "itertools"
+version = "0.11.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b1c173a5686ce8bfa551b3563d0c2170bf24ca44da99c7ca4bfdab5418c3fe57"
 dependencies = [
  "either",
 ]
@@ -636,9 +661,9 @@ dependencies = [
 
 [[package]]
 name = "templito"
-version = "0.4.3"
+version = "0.4.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "aeae02d52ef122ba18e07ab9b42f3f52cb82f8c26a57f026d9dbf8935dae2d0b"
+checksum = "a9a2c845f349217137871f77b925cd7406b15bafd14101c9e133c98ce86c382d"
 dependencies = [
  "anyhow",
  "base64",
@@ -648,6 +673,7 @@ dependencies = [
  "gobble",
  "image",
  "imagesize",
+ "iter_tools",
  "pulldown-cmark",
  "rand",
  "regex",

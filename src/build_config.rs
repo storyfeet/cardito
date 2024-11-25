@@ -30,6 +30,12 @@ impl BuildConfig {
 
         let mut init_data = HashMap::new();
 
+        if let Some(vv) = clp.values_of("imports") {
+            for v in vv {
+                crate::imports::import_templates(v, &mut tman, &fman)?;
+            }
+        }
+
         let primary: String = match clp.value_of("file") {
             Some(fname) => {
                 init_data.insert(
@@ -82,12 +88,6 @@ impl BuildConfig {
                 "front_temp".to_string(),
                 TData::Template(TreeTemplate::from_str(s)?),
             );
-        }
-
-        if let Some(vv) = clp.values_of("imports") {
-            for v in vv {
-                crate::imports::import_templates(v, &mut tman, &fman)?;
-            }
         }
 
         if let Some(s) = clp.value_of("bpath_temp") {
